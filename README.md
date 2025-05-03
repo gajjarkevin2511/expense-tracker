@@ -17,13 +17,14 @@
     ```  
 
 ## Backend Setup  
-1. Navigate to the `server` folder.  
-2. Run the command:  
+1. Navigate to the `server` folder.
+2. inside seql workbench create database name `expense_tracker`.
+3. Run the command:  
     ```bash  
     npm install  
     ```  
-3. Configure your database settings in the `.env` file.  
-4. Start the backend by running:  
+4. Configure your database settings in the `.env` file.  
+5. Start the backend by running:  
     ```bash  
     npm start  
     ```  
