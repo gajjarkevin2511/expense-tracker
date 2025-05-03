@@ -8,7 +8,10 @@ import {
 } from "../../../store/feature/statistics/statistics.api";
 import ReusableTable from "../../components/shared/table/Table";
 import SearchableInput from "../../components/shared/searchable-input/SearchableInput";
-import { selectStatistics } from "../../../store/feature/statistics/statistics.slice";
+import {
+  clearState,
+  selectStatistics,
+} from "../../../store/feature/statistics/statistics.slice";
 import { selectUser } from "../../../store/feature/user/user.slice";
 import { useForm } from "react-hook-form";
 import { getUsers } from "../../../store/feature/user/user.api";
@@ -27,11 +30,11 @@ const StatisticsPage = () => {
       dispatch(getPercentage({ userId: userId }));
     }
   }, [userId, dispatch]);
-  // dispatch(getTopDaysByExpenditure({ userId: 2 })).unwrap();
 
   useEffect(() => {
+    dispatch(clearState());
     dispatch(getUsers());
-  }, []);
+  }, [dispatch]);
   const columns = [
     { key: "day", title: "Day", align: "left" },
     { key: "totalExpenditure", title: "Total Expenditure", align: "right" },
@@ -65,24 +68,41 @@ const StatisticsPage = () => {
               data={userOptions}
               control={control}
             />
+            <Typography mt={2} >
+              Select a user to view their statistics
+            </Typography>
           </Grid>
         </Grid>
-        <Grid size={12}>
-          <Typography fontWeight={900} variant="h6">
-            Prediction: ({prediction?.predictedNextMonthExpenditure} Rs.)
-          </Typography>
-        </Grid>
-        <Grid size={12}>
-          <Typography variant="h6">
-            Statistics - Top 3 Days by Expenditure
-          </Typography>
-        </Grid>
-        {/* Section 2: Table */}
-        <ReusableTable label="top 3 days" columns={columns} data={top3Days} />
-        <Grid size={12}>
-          <Typography variant="h6">Statistics - Percentage Change</Typography>
-        </Grid>
-        <ReusableTable label="top 3 days" columns={percentageColumns} data={percentage} />
+        {userId && (
+          <>
+            <Grid size={12}>
+              <Typography fontWeight={900} variant="h6">
+                Prediction: ({prediction?.predictedNextMonthExpenditure} Rs.)
+              </Typography>
+            </Grid>
+            <Grid size={12}>
+              <Typography variant="h6">
+                Statistics - Top 3 Days by Expenditure
+              </Typography>
+            </Grid>
+            {/* Section 2: Table */}
+            <ReusableTable
+              label="top 3 days"
+              columns={columns}
+              data={top3Days}
+            />
+            <Grid size={12}>
+              <Typography variant="h6">
+                Statistics - Percentage Change
+              </Typography>
+            </Grid>
+            <ReusableTable
+              label="top 3 days"
+              columns={percentageColumns}
+              data={percentage}
+            />
+          </>
+        )}
       </Grid>
     </>
   );

@@ -16,9 +16,15 @@ import {
   updateExpense,
 } from "../../../store/feature/expense/expense.api";
 import dayjs from "dayjs";
+import UserForm from "../Users/UserForm";
+import CategoryForm from "../Category/CategoryForm";
+import { createUser } from "../../../store/feature/user/user.api";
+import { createCategory } from "../../../store/feature/category/category.api";
 
 const ExpensePage = () => {
   const [expenseData, setExpenseData] = useState(null);
+  const [openUserForm, setOpenUserForm] = useState(null);
+  const [openCategoryForm, setOpenCategoryForm] = useState(null);
 
   const { expenses } = useSelector(selectExpense);
 
@@ -106,13 +112,27 @@ const ExpensePage = () => {
           <Grid item>
             <Typography variant="h4">Expense Management</Typography>
           </Grid>
-          <Grid item>
+          <Grid container spacing={2} item>
             <PrimaryButtonComponent
               variant="contained"
               color="primary"
               onClick={() => setExpenseData({})}
             >
               Create Expense
+            </PrimaryButtonComponent>
+            <PrimaryButtonComponent
+              variant="contained"
+              color="primary"
+              onClick={() => setOpenUserForm({})}
+            >
+              Create User
+            </PrimaryButtonComponent>
+            <PrimaryButtonComponent
+              variant="contained"
+              color="primary"
+              onClick={() => setOpenCategoryForm({})}
+            >
+              Create Category
             </PrimaryButtonComponent>
           </Grid>
         </Grid>
@@ -128,6 +148,32 @@ const ExpensePage = () => {
         <ExpenseForm
           formData={expenseData}
           onSubmitSuccess={handleCreateOrUpdateExpense}
+        />
+      </BasicModal>
+      <BasicModal
+        label="Create User"
+        open={openUserForm}
+        handleClose={() => setOpenUserForm(null)}
+      >
+        <UserForm
+          formData={openUserForm}
+          onSubmitSuccess={async (data) => {
+            dispatch(createUser(data)).unwrap();
+            setOpenUserForm(null);
+          }}
+        />
+      </BasicModal>
+      <BasicModal
+        label="Create User"
+        open={openCategoryForm}
+        handleClose={() => setOpenCategoryForm(null)}
+      >
+        <CategoryForm
+          formData={openCategoryForm}
+          onSubmitSuccess={async (data) => {
+            dispatch(createCategory(data)).unwrap();
+            setOpenCategoryForm(null);
+          }}
         />
       </BasicModal>
     </>
